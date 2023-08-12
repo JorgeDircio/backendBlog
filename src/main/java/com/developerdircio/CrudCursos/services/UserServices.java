@@ -1,13 +1,14 @@
 package com.developerdircio.CrudCursos.services;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.developerdircio.CrudCursos.UserRepository;
 import com.developerdircio.CrudCursos.entities.UserEntity;
 import com.developerdircio.CrudCursos.shared.dto.UserDTO;
@@ -46,9 +47,16 @@ public class UserServices implements UserServicesInterfaces {
   }
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'loadUserByUsername'");
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+   
+    UserEntity userEntity = userRepository.findByEmail(email);
+
+    if(userEntity == null) {
+      throw new UsernameNotFoundException(email);
+    }
+
+    return new User(userEntity.getEmail(), userEntity.getPassword(), new ArrayList<>(null));
+
   }
   
 }
