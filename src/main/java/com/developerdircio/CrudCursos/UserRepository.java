@@ -5,5 +5,7 @@ import com.developerdircio.CrudCursos.entities.UserEntity;
 
 @Repository
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
+
+  UserEntity findByEmail(String email);
   
 }

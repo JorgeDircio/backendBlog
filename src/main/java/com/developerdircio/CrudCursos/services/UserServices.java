@@ -1,4 +1,6 @@
 package com.developerdircio.CrudCursos.services;
+import java.util.UUID;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,14 +18,17 @@ public class UserServices implements UserServicesInterfaces {
   @Override
   public UserDTO createUser(UserDTO user){
 
-    System.out.println("user => " + user);
+    if(userRepository.findByEmail(user.getEmail()) != null) 
+      throw new RuntimeException("El correo electronico ya existe");
 
     UserEntity userEntity = new UserEntity();
 
     BeanUtils.copyProperties(user, userEntity);
 
+    UUID userId = UUID.randomUUID();
+
     userEntity.setPassword("test1");
-    userEntity.setUserId("148ddj");
+    userEntity.setUserId(userId.toString());
 
     UserEntity storedUserEntity = userRepository.save(userEntity);
 
